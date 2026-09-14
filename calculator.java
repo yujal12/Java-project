@@ -10,7 +10,16 @@ public class calculator {
                 }
                 yield firstNumber / secondNumber;
             }
+            case '%' -> firstNumber * secondNumber / 100;
+            case '^' -> Math.pow(firstNumber, secondNumber);
             default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
         };
+    }
+
+    public static double squareRoot(double number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("Cannot calculate the square root of a negative number.");
+        }
+        return Math.sqrt(number);
     }
 }
