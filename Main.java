@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Main extends JFrame {
     private final JTextField display;
@@ -11,23 +13,26 @@ public class Main extends JFrame {
     private boolean isTypingNewNumber = true;
 
     public Main() {
-        super("Java Calculator App");
+        super("Calculator");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(360, 520);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(new BorderLayout(10, 10));
+        getContentPane().setBackground(new Color(28, 31, 36));
 
         display = new JTextField("0");
         display.setEditable(false);
         display.setHorizontalAlignment(JTextField.RIGHT);
         display.setFont(new Font("SansSerif", Font.BOLD, 30));
-        display.setBackground(Color.WHITE);
-        display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        display.setBackground(new Color(245, 247, 250));
+        display.setForeground(new Color(30, 30, 30));
+        display.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
         add(display, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel(new GridLayout(5, 4, 8, 8));
+        buttonPanel.setBackground(new Color(28, 31, 36));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         String[] buttons = {
@@ -42,11 +47,62 @@ public class Main extends JFrame {
             JButton button = new JButton(text);
             button.setFont(new Font("SansSerif", Font.BOLD, 22));
             button.setFocusPainted(false);
+            button.setBackground(getButtonColor(text));
+            button.setForeground(Color.WHITE);
+            button.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             button.addActionListener(new ButtonHandler(text));
             buttonPanel.add(button);
         }
 
         add(buttonPanel, BorderLayout.CENTER);
+
+        display.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char key = e.getKeyChar();
+                if (Character.isDigit(key) || key == '.') {
+                    appendNumber(String.valueOf(key));
+                    e.consume();
+                } else if (key == '+' || key == '-' || key == '*' || key == '/' || key == '%') {
+                    String op = switch (key) {
+                        case '+' -> "+";
+                        case '-' -> "-";
+                        case '*' -> "×";
+                        case '/' -> "÷";
+                        case '%' -> "%";
+                        default -> "";
+                    };
+                    if (!op.isEmpty()) {
+                        applyOperator(op);
+                        e.consume();
+                    }
+                } else if (key == '\n' || key == '=') {
+                    if (!pendingOperator.isEmpty()) {
+                        calculateResult();
+                    }
+                    e.consume();
+                } else if (key == 'c' || key == 'C') {
+                    clearAll();
+                    e.consume();
+                } else if (key == '\b') {
+                    deleteLastDigit();
+                    e.consume();
+                }
+            }
+        });
+    }
+
+    private Color getButtonColor(String text) {
+        if (text.matches("[0-9]|\\.")) {
+            return new Color(77, 83, 92);
+        }
+        if (text.equals("C") || text.equals("⌫")) {
+            return new Color(220, 91, 70);
+        }
+        if (text.equals("√") || text.equals("%") || text.equals("÷") || text.equals("×") || text.equals("-") || text.equals("+") || text.equals("=")) {
+            return new Color(54, 148, 214);
+        }
+        return new Color(89, 95, 105);
     }
 
     private void updateDisplay() {
