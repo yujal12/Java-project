@@ -6,18 +6,25 @@ A beginner-friendly Java project containing basic Java programming concepts and 
 
 ### 1. Main Java Program
 
-`Main.java` contains the main Java program and demonstrates fundamental Java programming concepts.
+`Main.java` contains the interactive calculator program and demonstrates fundamental Java programming concepts.
 
 ### 2. Calculator
 
-`calculator.java` is a simple calculator program that performs basic arithmetic operations.
+`calculator.java` is a calculator program that performs arithmetic and scientific operations.
 
 **Operations include:**
 
 * Addition `+`
 * Subtraction `-`
-* Multiplication `*`
-* Division `/`
+* Multiplication `*` and `x`
+* Division `/` and `÷`
+* Percentage `%`
+* Power `^`
+* Square root `sqrt` and `√`
+* Factorial `!`
+* Trigonometric functions `sin`, `cos`, `tan`
+* Logarithms `log10`, `ln`
+* Keyboard-friendly inputs like `plus`, `minus`, `multiply`, `divide`, `mod`, `power`
 
 ## 🛠️ Technologies Used
 
